@@ -43,15 +43,17 @@ object Main {
     * Exercise 2
     */
   def balance(chars: List[Char]): Boolean = {
+    def balanceChange(c: Char) = c match {
+      case ')' => -1
+      case '(' => 1
+      case _ => 0
+    }
     def balanceIter(head: Char, tail: List[Char], balance: Int): Boolean = {
-      val newBalance = if (head != ')' && head != '(') balance else if (head == '(') balance + 1 else balance - 1
-      if (newBalance < 0)
-        false
-      else if (tail.isEmpty)
+      val newBalance = balance + balanceChange(head)
+      if (newBalance < 0 || tail.isEmpty)
         newBalance == 0
-      else {
+      else
         balanceIter(tail.head, tail.tail, newBalance)
-      }
     }
 
     if (chars.isEmpty) true
