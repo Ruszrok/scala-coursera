@@ -11,116 +11,69 @@ object Main {
   }
 
   /**
-   * Exercise 1
-   */
-    def pascal(c: Int, r: Int): Int = {
-      def min(a: Int, b: Int) = if (a<b) a else b
+    * Exercise 1
+    */
+  def pascal(c: Int, r: Int): Int = {
+    def min(a: Int, b: Int) = if (a < b) a else b
 
-      def layerGenerator(layer: Array[Int]) = {
-        val len = min(layer.length, c + 1)// All right values redundant
-        val arr = new Array[Int](len+1)
-        arr(0) = 1
-        for (i <- 1 until len)
-          arr(i) = layer(i-1)+layer(i)
-        arr(len) = 0
-        arr
-      }
-
-      def pascalIter(layer: Array[Int], curRow: Int) : Int = {
-        if (curRow == r)
-          layer(c)
-        else {
-          val newLayer = layerGenerator(layer)
-          pascalIter(newLayer, curRow + 1)
-        }
-      }
-
-      pascalIter(Array(1,0), 0)
+    def layerGenerator(layer: Array[Int]) = {
+      val len = min(layer.length, c + 1)
+      // All right values redundant
+      val arr = new Array[Int](len + 1)
+      arr(0) = 1
+      for (i <- 1 until len)
+        arr(i) = layer(i - 1) + layer(i)
+      arr(len) = 0
+      arr
     }
-  
+
+    def pascalIter(layer: Array[Int], curRow: Int): Int = {
+      if (curRow == r)
+        layer(c)
+      else {
+        val newLayer = layerGenerator(layer)
+        pascalIter(newLayer, curRow + 1)
+      }
+    }
+
+    pascalIter(Array(1, 0), 0)
+  }
+
   /**
-   * Exercise 2
-   */
+    * Exercise 2
+    */
   def balance(chars: List[Char]): Boolean = {
-    def balanceIter(head: Char, tail: List[Char], balance: Int) : Boolean = {
-      val newBalance = if(head != ')' && head != '(') balance else if(head == '(') balance + 1 else balance -1
-      if(newBalance < 0)
-        false
-      else
-      if(tail.isEmpty)
+    def balanceChange(c: Char) = c match {
+      case ')' => -1
+      case '(' => 1
+      case _ => 0
+    }
+    def balanceIter(head: Char, tail: List[Char], balance: Int): Boolean = {
+      val newBalance = balance + balanceChange(head)
+      if (newBalance < 0 || tail.isEmpty)
         newBalance == 0
-      else{
+      else
         balanceIter(tail.head, tail.tail, newBalance)
-      }
     }
 
-    if(chars.isEmpty) true
+    if (chars.isEmpty) true
     else
       balanceIter(chars.head, chars.tail, 0)
   }
-  
+
   /**
-   * Exercise 3
-   */
+    * Exercise 3
+    */
   def countChange(money: Int, coins: List[Int]): Int = {
-    def getChangeCombination(money: Int, coins: List[Int], result : List[Int]): List[Int] = {
-      if(money == 0) result
-      else {
-        val availableCoins = coins.filter(_ <= money)
-        if (availableCoins.isEmpty) List[Int]()
-        else {
-          val newMoney = money - availableCoins.head
-          if (newMoney >= 0) {
-            val result1 = availableCoins.head :: result
-            getChangeCombination(newMoney, availableCoins, result1)
-          }
-          else {
-            getChangeCombination(money, availableCoins.tail, result)
-          }
-        }
-      }
+    def changeVariants(money: Int, coins: List[Int]): Int = {
+      val neededCoins = coins.filter(_ <= money)
+      if (money == 0) return 1
+      if (neededCoins.isEmpty) return 0
+
+      changeVariants(money - neededCoins.head, neededCoins) + changeVariants(money, neededCoins.tail)
     }
 
-    def hash(list: List[Int]) = {
-      var hash = 0
-      for(i <- list.indices){
-        hash += list(i)*2^i
-      }
-      hash
-    }
-
-    def listContains(l : List[List[Int]], t :List[Int]) = {
-      l.exists(hash(_) == hash(t))
-    }
-
-    def ChangeIterator(money: List[Int], coins: List[Int], combos: List[List[Int]]): List[List[Int]] =
-    {
-      if(money.isEmpty) return combos
-      val combo = getChangeCombination(money.head, coins, List[Int]())
-      val fullCombo = money.tail ++ combo
-
-      if(combo.length == 1)
-      {
-        if(!listContains(combos, fullCombo)) {
-          ChangeIterator(fullCombo, coins.filter(_ < combo.head), fullCombo :: combos)
-        } else {
-          ChangeIterator(fullCombo, coins.filter(_ < combo.head), combos)
-        }
-      }
-      else {
-        if (combo.length <= 1) {
-          combos
-        }
-        else
-          ChangeIterator(fullCombo, coins, fullCombo :: combos)
-      }
-    }
-
-    val allCombinations = ChangeIterator(List(money), coins.sortWith(_>_), List[List[Int]]() )
-    if(allCombinations.isEmpty) 0
-    else
-    {
-      allCombinations.length
-    }
+    val neededCoins = coins.sortWith(_ > _)
+    if (money == 0) 0 else changeVariants(money, neededCoins)
   }
-  }
+}
