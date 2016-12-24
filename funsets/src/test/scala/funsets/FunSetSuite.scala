@@ -164,7 +164,7 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  test("correct existss implementation") {
+  test("correct exists implementation") {
     new TestSets  {
       val s12 = union(s1, s2)
       val s13 = union(s1, s3)
@@ -173,6 +173,24 @@ class FunSetSuite extends FunSuite {
       assert(exists(s12, x => x>0))
       assert(exists(s12, x => x!=1))
       assert(!exists(s13, x => x==2))
+    }
+  }
+
+  test("correct map implementation") {
+    new TestSets  {
+      val s12 = union(s1, s2)
+      val maped = map(s12, x=>x*x)
+      assert(contains(maped, 1))
+      assert(contains(maped, 4))
+      assert(!contains(maped, 2))
+    }
+  }
+
+  test("correct map implementation 0 multiplier") {
+    new TestSets  {
+      val s12 = union(s1, s2)
+      val maped = map(s12, x=>x*0)
+      assert(forall(maped, x=>x==0))
     }
   }
 }
