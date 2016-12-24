@@ -163,4 +163,16 @@ class FunSetSuite extends FunSuite {
       assert(forall(s13, x => x!=2))
     }
   }
+
+  test("correct existss implementation") {
+    new TestSets  {
+      val s12 = union(s1, s2)
+      val s13 = union(s1, s3)
+      assert(exists(s1, x => x==1))
+      assert(exists(s1, x => x!=2))
+      assert(exists(s12, x => x>0))
+      assert(exists(s12, x => x!=1))
+      assert(!exists(s13, x => x==2))
+    }
+  }
 }
