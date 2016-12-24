@@ -152,4 +152,15 @@ class FunSetSuite extends FunSuite {
     }
   }
 
+  test("correct forall implementation") {
+    new TestSets  {
+      val s12 = union(s1, s2)
+      val s13 = union(s1, s3)
+      assert(forall(s1, x => x==1))
+      assert(forall(s1, x => x!=2))
+      assert(forall(s12, x => x>0))
+      assert(!forall(s12, x => x!=1))
+      assert(forall(s13, x => x!=2))
+    }
+  }
 }
