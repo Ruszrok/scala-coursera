@@ -101,6 +101,18 @@ class FunSetSuite extends FunSuite {
     }
   }
 
+  test("singletonSet(2) not contains 1"){
+    new TestSets {
+      assert(!contains(s2, 1), "Not contatins failure")
+    }
+  }
+
+  test("singletonSet(2) not contains 3"){
+    new TestSets {
+      assert(!contains(s2, 3), "Not contatins failure")
+    }
+  }
+
   test("union contains all elements of each set") {
     new TestSets {
       val s = union(s1, s2)
