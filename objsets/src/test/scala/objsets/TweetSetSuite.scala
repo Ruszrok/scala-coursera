@@ -33,6 +33,12 @@ class TweetSetSuite extends FunSuite {
     }
   }
 
+  test("filter: a on set2") {
+    new TestSets {
+      assert(size(set2.filter(tw => tw.user == "a")) === 1)
+    }
+  }
+
   test("filter: a on set5") {
     new TestSets {
       assert(size(set5.filter(tw => tw.user == "a")) === 1)
