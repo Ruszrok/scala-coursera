@@ -13,9 +13,8 @@ abstract class TweetSet {
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet
   def union(that: TweetSet): TweetSet = that.filterAcc(t => !this.contains(t), this)
   def mostRetweeted: Tweet = {
-    var maxRetweet = -1
-    var resultTweet:Tweet = null
-    foreach(t => if(t.retweets > maxRetweet) {maxRetweet = t.retweets; resultTweet = t})
+    var resultTweet:Tweet = new Tweet("","",-1000)
+    foreach(t => if(t.retweets > resultTweet.retweets) resultTweet = t )
     resultTweet
   }
   
