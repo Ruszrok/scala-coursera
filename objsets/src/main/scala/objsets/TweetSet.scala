@@ -18,7 +18,12 @@ abstract class TweetSet {
    * Question: Should we implment this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-    def union(that: TweetSet): TweetSet = ???
+    def union(that: TweetSet): TweetSet = {
+      val diff = that.filter(t => !this.contains(t))
+      var result = diff
+      foreach(t=> result = result.incl(t))
+      result
+    }
   
   /**
    * Returns the tweet from this set which has the greatest retweet count.
