@@ -225,7 +225,11 @@ object Huffman {
       case Leaf(c, _) => List((c, List[Bit]()))
       case Fork(l, r, _, _) => mergeCodeTables(convert(l), convert(r))
     }
-  
+
+    def convertNonRecursive(tree: CodeTree): CodeTable = {
+      chars(tree).map(c=> (c, encode(tree)(List(c))))
+    }
+
   /**
    * This function takes two code tables and merges them into one. Depending on how you
    * use it in the `convert` method above, this merge method might also do some transformations
