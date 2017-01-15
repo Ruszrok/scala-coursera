@@ -9,3 +9,5 @@ val words = dictionary.groupBy(Anagrams.wordOccurrences).toList
 //  .groupBy(p => p._1)
 Anagrams.wordOccurrences("asad")
 Anagrams.sentenceOccurrences(List("aaa", "b", "cc"))
+
+Anagrams.wordAnagrams("eat")
