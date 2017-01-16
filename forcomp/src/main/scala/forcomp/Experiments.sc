@@ -1,13 +1,14 @@
-import forcomp.Anagrams
+import forcomp.Anagrams._
 
-val str = "aaabbcccdd"
-val arr = str.groupBy(_.toChar).mapValues(_.size).toList
+var occ = sentenceOccurrences(List("aaa"))
+def combine(occ: Occurrences):List[Occurrences] = occ match {
+  case List() => List(Nil)
+  case (c, n) :: tail =>
+    val tailCombos = combine(tail)
+    tailCombos ::: (for{
+      j <- tailCombos
+      i <- 1 to n
+    } yield (c, i) :: j)
+}
 
-val dictionary = List[String]("test", "stet", "aq")
-val words = dictionary.groupBy(Anagrams.wordOccurrences).toList
-//  .map(w =>(Anagrams.wordOccurrences(w), w))
-//  .groupBy(p => p._1)
-Anagrams.wordOccurrences("asad")
-Anagrams.sentenceOccurrences(List("aaa", "b", "cc"))
-
-Anagrams.wordAnagrams("eat")
+combine(occ)
