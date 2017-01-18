@@ -11,9 +11,9 @@ object Anagrams {
 
   val dictionary: List[Word] = loadDictionary
 
-  def wordOccurrences(w: Word): Occurrences = w.groupBy(_.toLower).mapValues(_.size).toList.sortWith(_._1 < _._1)
+  def wordOccurrences(w: Word): Occurrences = w.groupBy(_.toLower).mapValues(_.length).toList.sortWith(_._1 < _._1)
 
-  def sentenceOccurrences(s: Sentence): Occurrences = s.flatMap(wordOccurrences)
+  def sentenceOccurrences(s: Sentence): Occurrences = s.flatMap(wordOccurrences).groupBy(_._1).mapValues(_.size).toList.sortWith(_._1 < _._1)
 
   lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = dictionary.groupBy(Anagrams.wordOccurrences) withDefaultValue Nil
 
