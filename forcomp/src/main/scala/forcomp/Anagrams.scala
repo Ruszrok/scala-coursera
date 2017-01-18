@@ -101,7 +101,19 @@ object Anagrams {
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
    */
-  def subtract(x: Occurrences, y: Occurrences): Occurrences = combinations(x).filter(_.contains(y)).filter(_ != y).head
+  def subtract(a1: Occurrences, a2: Occurrences): Occurrences = {
+    def minus(x:(Char, Int), y: (Char,Int)) : (Char, Int) = {
+      if (x._1 == y._1)
+        (x._1, x._2-y._2)
+      else
+        x
+    }
+
+    if (a2.isEmpty)
+      a1
+    else
+      subtract(a1.map(minus(_, a2.head)).filter(_._2 > 0), a2.tail)
+  }
 
   /** Returns a list of all anagram sentences of the given sentence.
    *
